@@ -10,6 +10,7 @@ const NAV = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState<string>("features");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const listRef = useRef<HTMLUListElement>(null);
   const pillRef = useRef<HTMLSpanElement>(null);
 
@@ -143,7 +144,47 @@ export function Navbar() {
           >
             Start free →
           </a>
+          <button
+            className="md:hidden ml-1 flex h-8 w-8 flex-col items-center justify-center gap-1 rounded-full p-1 transition-colors hover:bg-surface-2"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle Menu"
+          >
+            <span className={`block h-0.5 w-4 rounded-full bg-ink transition-all duration-300 ${isMobileMenuOpen ? "translate-y-1.5 rotate-45" : ""}`} />
+            <span className={`block h-0.5 w-4 rounded-full bg-ink transition-all duration-300 ${isMobileMenuOpen ? "opacity-0" : ""}`} />
+            <span className={`block h-0.5 w-4 rounded-full bg-ink transition-all duration-300 ${isMobileMenuOpen ? "-translate-y-1.5 -rotate-45" : ""}`} />
+          </button>
         </div>
+      </div>
+
+      {/* Mobile Menu Dropdown */}
+      <div 
+        className={`absolute inset-x-4 top-[calc(100%+0.5rem)] rounded-2xl border border-line bg-bg/95 p-4 backdrop-blur-xl transition-all duration-200 ease-out md:hidden shadow-[0_8px_40px_-12px_rgba(214,255,61,0.15)] origin-top ${
+          isMobileMenuOpen ? "opacity-100 scale-y-100 translate-y-0" : "opacity-0 scale-y-95 -translate-y-2 pointer-events-none"
+        }`}
+      >
+        <nav aria-label="Mobile">
+          <ul className="flex flex-col gap-2">
+            {NAV.map((n) => (
+              <li key={n.id}>
+                <a
+                  href={`#${n.id}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block rounded-lg px-4 py-3 text-sm font-medium text-ink-dim transition-colors hover:bg-surface-2 hover:text-ink"
+                >
+                  {n.label}
+                </a>
+              </li>
+            ))}
+            <li className="mt-2 border-t border-line pt-2 sm:hidden">
+              <a
+                href="#"
+                className="block rounded-lg px-4 py-3 text-sm font-medium text-ink-dim transition-colors hover:bg-surface-2 hover:text-ink"
+              >
+                Sign in
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </header>
   );
